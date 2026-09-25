@@ -1,0 +1,64 @@
+---
+version: "0.1"
+
+# Assignment requirement:
+# Run the same Playwright suite in parallel on at least two OS/browser
+# combinations. Matrix creates Windows + Linux executions.
+runson: ${matrix.os}
+
+globalTimeout: 30
+testSuiteTimeout: 20
+testSuiteStep: 10
+
+autosplit: false
+concurrency: 2
+retryOnFailure: true
+maxRetries: 1
+
+matrix:
+  os: ["win", "linux"]
+  browser: ["Chrome"]
+  version: ["latest"]
+
+# Dependency caching
+cacheKey: '{{ checksum "package.json" }}'
+cacheDirectories:
+  - node_modules
+
+# Environment variables injected outside the application.
+env:
+  BASE_URL: "https://www.testmuai.com/selenium-playground"
+  CI: "true"
+  TEST_ENV: "hyperexecute"
+  BROWSER_CHANNEL: "chrome"
+  # These values come from HyperExecute Secret Management.
+  # Create LT_USERNAME and LT_ACCESS_KEY in the HyperExecute Secrets section.
+  LT_USERNAME: ${{.secrets.LT_USERNAME}}
+  LT_ACCESS_KEY: ${{.secrets.LT_ACCESS_KEY}}
+
+# Pre Steps
+pre:
+  - npm install
+  - npx playwright install chromium
+
+# Run all assignment tests.
+testRunnerCommand: npx playwright test
+
+# Optional post step: leave a machine-readable execution marker in logs.
+post:
+  - node -e "console.log('HyperExecute execution completed')"
+
+# Store Playwright reports, screenshots, videos, traces and JUnit results.
+uploadArtifacts:
+  - name: Playwright-Reports
+    path:
+      - playwright-report/**
+      - test-results/**
+
+mergeArtifacts: true
+
+jobLabel:
+  - playwright-102
+  - javascript
+  - testmuai
+  - matrix

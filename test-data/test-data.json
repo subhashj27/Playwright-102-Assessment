@@ -1,0 +1,18 @@
+{
+  "simpleFormMessage": "Welcome to TestMu AI",
+  "sliderStartValue": 15,
+  "sliderTargetValue": 95,
+  "form": {
+    "name": "TestMu AI User",
+    "email": "testmu.playwright@example.com",
+    "password": "Password@123",
+    "company": "TestMu AI",
+    "website": "https://www.testmuai.com",
+    "country": "United States",
+    "city": "New York",
+    "address1": "123 Test Street",
+    "address2": "Suite 100",
+    "state": "New York",
+    "zip": "10001"
+  }
+}
